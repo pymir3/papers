@@ -394,8 +394,51 @@ IEEEtran, journal, \LaTeX, paper, template.
 \section{Introduction}
 Over the last decades, there has been great effort towards the
 development of algorithms for automatic inference of musical
-content -- or, Music Information Retrieval (MIR). 
+content -- or, Music Information Retrieval (MIR). This lead to the
+development of several toolboxes containing algorithms usually meant
+for MIR, aiming at making application development more agile and
+robust. Research requirements, however, are different from industrial
+ones.
 
+In the context of research, it is important that the developer can
+quickly test new ideas, as implementing and testing is the only robust
+way to determine if such ideas work. Also, the results of applying
+that newly developed idea should be compared to previous ones, which
+creates a problem of result scrutinization. Last, the experimental
+reproducibility problem comprises the need to ensure that the next
+researcher will be able to perform that same experiment and obtain the
+same results.
+
+We performed a review of the available frameworks and toolboxes aimed
+at MIR applications, shown in Section \ref{sec:related}. This
+review has shown that, although they may contain a comprehensive and
+highly robust and optimized set of algorithms, the research-related
+issues discussed above are commonly neglected. Hence, we propose a
+novel framework, namely \textsc{PyMIR3} (Python-based Music Information
+Retrieval Reproducible Research), which adressess these problems.
+
+The structure of \textsc{PyMIR3} is highly modular, which allows
+developers to easily change algorithms in key parts of an MIR
+application. This, together with the use of an easy computer language
+(Python), allows the fast prototyping and testing of solutions. In
+addition, \textsc{PyMIR3} incorporates modules that deal with
+different data formats and result evaluation procedures, which are
+essential tasks in the context of research.
+
+By using an auxiliary application, which is ready to use, experimental
+procedures may be written in Bash script. The separation between the
+toolset and the experimental procedures contribute towards the
+research reproducibility. Also, auxiliary scripts allow for quick download
+of common databases, which allows a fast setup of the development
+environment.
+
+The remainder of this article is organized as follows. Section
+\ref{sec:related} brings a literature review, highlighting the
+contribution of \textsc{PyMIR3} for the scientific community. The
+system inner structures are described in Section
+\ref{sec:system}. Further discussion is conducted in Section
+\ref{sec:discussion} and, last, Section \ref{sec:conclusion} brings
+conclusive remarks.
 
 %\IEEEPARstart{T}{his} demo file is intended to serve as a ``starter file''
 %for IEEE journal papers produced under \LaTeX\ using
@@ -404,6 +447,7 @@ content -- or, Music Information Retrieval (MIR).
 % (should never be an issue)
 %I wish you the best of success.
 \section{Related Work}
+\label{sec:related}
 The development of advanced digital signal processing (DSP) techniques aimed at
 audio analysis, especially in the late 1990's, made necessary the
 development of a common framework. Such a framework would aim at
@@ -454,7 +498,7 @@ creation, without the need to learn a new language or to work together
 with an assistant computer scientist.
 
 Also aiming at using a distributed environment, PyCASP
-\cite{Gonina2013} was developed. Because it uses a widely-used
+\cite{Gonina2011} was developed. Because it uses a widely-used
 language (Python), it may be integrated in many different
 applications. Therefore, applications can be quickly written and
 easily implemented in parallel architectures.
@@ -473,6 +517,8 @@ time-consuming than developing the algorithms themselves. This is the
 main problem that PyMIR3 proposes to solve.
 
 \section{Proposed System PyMIR3}
+\label{sec:system}
+
 \subsection{Modularity}
 
 \subsection{Fast prototyping}
@@ -482,8 +528,10 @@ main problem that PyMIR3 proposes to solve.
 \subsection{HIgh-level scripting}
 
 \section{Discussion}
+\label{sec:discussion}
 
 \section{Conclusion}
+\label{sec:conclusion}
 
 \subsection{Subsection Heading Here}
 Subsection text here.
