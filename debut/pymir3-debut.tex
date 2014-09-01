@@ -532,30 +532,57 @@ and will be described in the next section.
 
 \section{Discussion}
 \label{sec:discussion}
+Determining to what extent \textsc{PyMIR3} has
+solved the problems it aims at is a hard task. It has been used in research work,
+both in early versions \cite{Tavares2013e}, more mature evolutions
+\cite{Tavares2013} and, more recently, in development versions
+containing experimental features
+\cite{Simurra2014,Tavares2014}. Nevertheless, these works had the
+participation of \textsc{PyMIR3}'s developers, which makes this
+evidence biased and, at most, anecdotal.
+
+It was observed, however, that the use of a common framework greatly
+increased the code reuse, even though the purposes of the experiments
+were different. Also, the separation of experimental procedures from 
+the central codebase helped keeping a clear log of what ideas and
+parameters had been tested, as well as of the results gathered from each
+trial. As a result, the results were consistently gathered and may be
+reproduced by anyone.
+
+We expect to be able to exchange with the scientific community in
+order to obtain feedback about points to improve in
+\textsc{PyMIR3}. These may result in positive interactions and
+developments, which are going to be present in future work. The next
+section presents conclusive remarks.
 
 \section{Conclusion}
 \label{sec:conclusion}
+We presented a novel Python-based framework aimed at reproducible
+research in the context of Music Information Retrieval, namely
+\textsc{PyMIR3}. The framework allows quick algorithm development and
+agile experimental design and result logging. It has been successfully
+used in related research within our group.
 
-\subsection{Subsection Heading Here}
-Subsection text here.
+The framework relies on a highly modular structure and semantically
+meaningful data structures. As a result of this design, the
+development of small modifications to information retrieval processes
+do not require the understanding of a whole source code, making the
+whole trial process significantly easier. Also, the experimental
+design is separated from the functional source code using a
+high-level language, which makes it easier to organize and maintain
+experimental logs.
 
-% needed in second column of first page if using \IEEEpubid
-%\IEEEpubidadjcol
-
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
-
+In future work, we expect to collect feedback from the scientific
+community and discuss improvements in this framework.
 
 
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
-
-
-The authors would like to thank...
+The authors would like to thank CNPq and CAPES for funding this research.
 
 \bibliographystyle{IEEEtran}
-\bibliography{mir_frameworks}
+\bibliography{mir_frameworks,tavares}
 
 \end{document}
 
