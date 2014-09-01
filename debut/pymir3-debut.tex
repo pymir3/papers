@@ -392,6 +392,7 @@ IEEEtran, journal, \LaTeX, paper, template.
 
 
 \section{Introduction}
+\label{sec:intro}
 Over the last decades, there has been great effort towards the
 development of algorithms for automatic inference of musical
 content -- or, Music Information Retrieval (MIR). This lead to the
@@ -510,11 +511,13 @@ in particular situations). Aiming at solving this problem, Essentia
 toolbox for MIR. It was written in C++ and provides a vast amount of
 pre-built feature extraction algorithms.
 
-A problem that remains open, however, is the design of reproducible
-experiments. In research, it is important to design experiments, deal
-with databases and keep track of the results, which may be even more
-time-consuming than developing the algorithms themselves. This is the
-main problem that PyMIR3 proposes to solve.
+Although these frameworks present a comprehensive set of algorithms
+that may be applied in several contexts, none of them address problems
+related to designing reproducible experiments, as discussed in Section
+\ref{sec:intro}. Such an effort is, in many occasions, even more
+time-consuming than implementing algorithms
+themselves. \textsc{PyMIR3} aims at contributing towards these issues,
+and will be described in the next section.
 
 \section{Proposed System PyMIR3}
 \label{sec:system}
