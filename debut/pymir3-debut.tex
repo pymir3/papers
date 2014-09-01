@@ -392,13 +392,85 @@ IEEEtran, journal, \LaTeX, paper, template.
 
 
 \section{Introduction}
-\IEEEPARstart{T}{his} demo file is intended to serve as a ``starter file''
-for IEEE journal papers produced under \LaTeX\ using
-IEEEtran.cls version 1.8 and later.
+Over the last decades, there has been great effort towards the
+development of algorithms for automatic inference of musical
+content -- or, Music Information Retrieval (MIR). 
+
+
+%\IEEEPARstart{T}{his} demo file is intended to serve as a ``starter file''
+%for IEEE journal papers produced under \LaTeX\ using
+%IEEEtran.cls version 1.8 and later.
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-I wish you the best of success.
+%I wish you the best of success.
 \section{Related Work}
+The development of advanced digital signal processing (DSP) techniques aimed at
+audio analysis, especially in the late 1990's, made necessary the
+development of a common framework. Such a framework would aim at
+avoiding re-writing code, making it easy to develop and share new
+scientific and commercial tools based on Music Information Retrieval
+(MIR). Over the last decades, many frameworks were proposed, each with
+its advantages and drawbacks.
+
+One of the first frameworks developed for this purpose was Marsyas
+\cite{Tzanetakis1999}, written in the C++ language. It implements an
+elegant implicit patching schema that allows quick development of MIR
+systems based on smaller blocks. It supports many common DSP
+algorithms, may be ported to other languages such as Python or Java,
+has a relatively large user base and has been used as 
+basis for many research papers.
+
+Later, Muugle \cite{Bosma2006} combined MySQL, PhP, Java, C++ and Perl
+in a framework that explicitly deals with databases and user
+interfaces. It is aimed at the calculation of audio track
+similarities, ultimately leading to a query-by-humming
+system. Although powerful, the system may become more complicated to
+learn or modify, as many languages are used and the system has a very
+specific purpose.
+
+With the high enlargement of content databases, it became necessary to apply specific
+techniques for scalability. DART \cite{Al-Shakarchi2006} is a
+framework that allows executing DSP algorithms in distributed systems,
+which is of great use for applications that rely on big databases. It
+was implemented over a graphical problem-solving environment called
+Trianna, which allows it to use several numerical optimization
+resources.
+
+In the MatLab environment, both Voicebox \cite{Brookes2003} and MIR
+Toolbox \cite{Lartillot2008} are toolboxes that comprise many DSP
+algorithms that can be used in audio analysis. MatLab is largely used
+in the MIR field, especially because of its support for implementation and
+depuration of algorithm. However, it is harder to implement MatLab
+code in an application, and licensing costs may hinder development by
+independent researchers.
+
+As computers became faster, MIR techniques began
+being used online in musical applications. This lead to the
+development of SCMIR \cite{Collins2011} and PDescriptors
+\cite{Monteiro2011}, which are libraries that implement MIR techniques
+respectively in SuperCollider and PureData environments. This provides
+musicians with a novel tool for 
+creation, without the need to learn a new language or to work together
+with an assistant computer scientist.
+
+Also aiming at using a distributed environment, PyCASP
+\cite{Gonina2013} was developed. Because it uses a widely-used
+language (Python), it may be integrated in many different
+applications. Therefore, applications can be quickly written and
+easily implemented in parallel architectures.
+
+The high number of toolboxes and frameworks for MIR lead to inevitable
+divergences on code details (for example, how to deal with zero values
+in particular situations). Aiming at solving this problem, Essentia
+\cite{Bogdanov2013} was presented as a comprehensive and robust
+toolbox for MIR. It was written in C++ and provides a vast amount of
+pre-built feature extraction algorithms.
+
+A problem that remains open, however, is the design of reproducible
+experiments. In research, it is important to design experiments, deal
+with databases and keep track of the results, which may be even more
+time-consuming than developing the algorithms themselves. This is the
+main problem that PyMIR3 proposes to solve.
 
 \section{Proposed System PyMIR3}
 \subsection{Modularity}
@@ -432,7 +504,7 @@ Subsubsection text here.
 The authors would like to thank...
 
 \bibliographystyle{IEEEtran}
-\bibliography{bibliography.bib}
+\bibliography{mir_frameworks}
 
 \end{document}
 
