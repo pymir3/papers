@@ -1,0 +1,289 @@
+\documentclass{beamer}
+\RequirePackage[utf8]{inputenc}
+%\RequirePackage{textcomp}
+\usepackage[english]{babel}    % hiphenao em portugues
+\usepackage[T1]{fontenc} 
+\usepackage{ae} 
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{pgfplots, pgfplotstable}
+%%%% TIKZ STUFF %%%%%
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+
+
+% Define block styles
+\tikzstyle{block} = [rectangle, draw, fill=white!100, 
+    text width=8em, text centered, rounded corners, minimum
+    height=2em]
+\tikzstyle{block2} = [rectangle, draw, fill=gray!20, 
+    text width=8em, text centered, rounded corners, minimum height=2em]
+\tikzstyle{line} = [draw, -latex']
+
+\usepackage{beamerthemedefault}
+%\RequirePackage{floatflt}
+\usepackage{subfigure}
+
+\title{Query-by-Multiple-Examples: Content-Based Search in Computer-Assisted Sound-Based Musical Composition}
+\author{Tiago Fernandes Tavares, Jônatas Manzolli\\Interdisciplinay
+  Nucleus of Sound Communication\\University of Campinas - Brazil\\ \url{tiagoft@gmail.com}\\
+  \url{http://www.nics.unicamp.br/~tiago}}
+\date{Sept/17/2014}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section[Outline]{}
+
+%\frame{\tableofcontents}
+
+
+\section{Introduction}
+\frame{
+	\frametitle{Sound-based Music}
+\Large
+Musical discourse is based on the evolution of sonic
+characteristics.\\
+Examples: Electroacoustic, Acousmatic, Mixed Music.\\
+Techniques: sequencing, granular synthesis, other digital effects...\\
+}
+
+\frame{
+	\frametitle{Problem: search for content}
+\Large
+Musicians might...
+\begin{enumerate}
+\item Record their own sound database
+\item Privately share their database
+\item Search the Internet for more sounds
+\end{enumerate}
+Problem: efficiently acquire new sounds for a database!
+}
+
+\frame{
+	\frametitle{Solution 1: TAGS}
+\Large
+Problems with this solution:
+\begin{itemize}
+\item We disagree on the meaning of tags (what is ``bright''?)
+\item We disagree on what tags are suitable for each sound
+\end{itemize}
+}
+
+\frame{
+  \frametitle{Solution 2: Query-by-example}
+\Large
+\begin{enumerate}
+\item Map the audio file to some $\mathbb{R}^N$ vector space using
+  objetive features calculated from the signal (e.g., mean and
+  variance of energy, spectral flux, spectral centroid...),
+\item Perceptually similar sounds should be mapped to
+  close points in $\mathbb{R}^N$.
+\end{enumerate}
+Problem with this solution: $\mathbb{R}^N$ lacks meaning!
+}
+
+\frame{
+	\frametitle{Query by Multiple Examples}
+\Large
+Idea: a query is built using many sounds that share the desired characteristic.
+\begin{itemize}
+	\item Map sounds to $\mathbb{R}^N$
+	\item Estimate a model from the elements of the query
+  \item Check the database for elements that suit the model
+\end{itemize}
+}
+
+\frame{
+	\frametitle{Query by Multiple Examples}
+\begin{figure}[ht!]
+\centering
+\begin{tikzpicture}[node distance = 4cm, auto]
+    % Place nodes
+    \node [block] (audio) {Audio Dataset};
+    \node [block2, below of=audio, yshift=2.7cm] (composer) {Composer};
+    \node [block, below of=composer, yshift=2.7cm] (perception) {Perception};
+%    \node [block, below of=perception, yshift=2.7cm] (query) {Examples};
+
+    \node [block2, right of=composer] (computer) {Computer};
+    \node [block, below of=computer, yshift=2.7cm] (features) {Features};
+    \node [block, below of=features, yshift=2.7cm] (model) {Model};
+    \node [block, below of=model, yshift=2.7cm] (recommendation) {Recommendation};
+
+    % Draw edges
+    \path [line] (audio) -- (composer);
+    \path [line] (audio) -| (computer);
+    \path [line] (composer) -- (perception);
+%    \path [line] (perception) -- (query);
+    \path [line] (perception) |- node [xshift=1cm] {Query $\{e_j\}$}  (model);
+    \path [line] (computer) -- (features);
+    \path [line] (features) -- node {$\{d_i\} \in \mathbb{R}^N$} (model);
+    \path [line] (model) -- (recommendation);
+    \path [line,dashed] (recommendation) -| ([xshift=-0.5cm] composer.west) -- (composer);
+\end{tikzpicture}
+\label{fig:block-diagram}
+\caption{Block diagram for the proposed system.}
+\end{figure}
+}
+
+\frame{
+  \frametitle{How to search using multiple examples?}
+  \Large
+We should find elements that are...
+\begin{itemize}
+\item <1-> Close to any element of the query (Minimum
+  Distance)?
+\item <2-> Close to any element of the query AND far from other
+  elements in the database (Minimum Mutual Distance)?
+\end{itemize}
+These correspond to many single-example, K-NN-based queries!
+}
+
+\frame{
+  \frametitle{How to search using multiple examples?}
+  \Large
+We can build a model!
+\begin{itemize}
+\item <1-> Build a generative model (Naive Bayes)
+\item <2-> Before that, find directions in which the query spans and
+  perform dimension reduction (PCA-Bayes)
+\end{itemize}
+These incorporate joint knowledge about the query set!
+}
+
+\frame{
+  \frametitle{Experiments}
+  \Large
+\begin{itemize}
+\item We gathered a small dataset (51 sounds)
+\item 3 composers (C1, C2, C3) made sound groups as they thought it
+  would fit
+\item We used part of the group as a query and verified if the system
+  would extrapolate the rest of the group (3 best results)
+\end{itemize}
+}
+
+\frame{
+  \frametitle{Results}
+\begin{figure}[ht!]
+\centering
+%\caption{Results using Acc2.} 
+\begin{tikzpicture}
+\pgfplotstableread[row sep=crcr]{ % Read the data into a table macro
+Label   MD  MMD  NB PB  \\
+C1      17   17   17  21 \\
+C2      17   21   23  22\\
+C3      27   34   33   40 \\
+}\datatable
+
+\begin{axis}[
+  width=1.0\textwidth,
+  height=4.cm,
+	xtick=data,
+  ymin=0,
+  ymax=100,
+  ylabel=Hits (\%),
+	xlabel=Composers,
+	enlarge x limits = 0.20,
+	legend style={legend columns=-1},
+	ybar,
+	bar width=10pt,
+  xticklabels from table={\datatable}{Label}
+]
+
+\addplot [fill=white] table [x expr=\coordindex, y=MD] {\datatable};    % Plot the "First" column against the data index
+\addplot [fill=gray!30]table [x expr=\coordindex, y=MMD] {\datatable};
+\addplot [fill=gray!90] table [x expr=\coordindex, y=NB] {\datatable};
+\addplot [fill=black] table [x expr=\coordindex, y=PB] {\datatable};
+% \addplot  
+% 	coordinates {(MD,0.38) (MMD,0.44)
+% 		 (NB,0.42) (PB,0.52)};
+
+% \addplot 
+% 	coordinates {(MD,0.42) (MMD,0.51)
+% 		 (NB,0.51) (PB,0.43)};
+
+% \addplot 
+% 	coordinates {(MD,0.61) (MMD,0.72)
+% 		 (NB,0.67) (PB,0.76)};
+
+
+\legend{MD,MMD,NB,PB}
+\end{axis}
+\end{tikzpicture}
+%\label{fig:res_acc2}
+\end{figure}
+\begin{figure}[ht!]
+\centering
+%\caption{Results using Acc1.} 
+\begin{tikzpicture}
+\pgfplotstableread[row sep=crcr]{ % Read the data into a table macro
+Label   MD  MMD  NB PB \\ 
+C1      38   44   42  52 \\
+C2      42   51   51  43\\
+C3      61   72   67  76\\
+}\datatable
+
+\begin{axis}[
+  width=1.0\textwidth,
+  height=4.cm,
+	xtick=data,
+  ymin=0,
+  ymax=100,
+  ylabel=Res. with hits (\%),
+	xlabel=Composers,
+	enlarge x limits = 0.20,
+	legend style={legend columns=-1},
+	ybar,
+	bar width=10pt,
+  xticklabels from table={\datatable}{Label}
+]
+
+\addplot [fill=white] table [x expr=\coordindex, y=MD] {\datatable};    % Plot the "First" column against the data index
+\addplot [fill=gray!30]table [x expr=\coordindex, y=MMD] {\datatable};
+\addplot [fill=gray!90] table [x expr=\coordindex, y=NB] {\datatable};
+\addplot [fill=black] table [x expr=\coordindex, y=PB] {\datatable};
+% \addplot 
+% 	coordinates {(MD,0.38) (MMD,0.44)
+% 		 (NB,0.42) (PB,0.52)};
+
+% \addplot 
+% 	coordinates {(MD,0.42) (MMD,0.51)
+% 		 (NB,0.51) (PB,0.43)};
+
+% \addplot 
+% 	coordinates {(MD,0.61) (MMD,0.72)
+% 		 (NB,0.67) (PB,0.76)};
+
+
+\legend{MD,MMD,NB,PB}
+\end{axis}
+\end{tikzpicture}
+%\label{fig:res_acc1}
+\end{figure}
+}
+
+\frame{
+  \frametitle{Future work}
+  \Large
+  Some questions to be asked:
+  \begin{itemize}
+  \item Even if a result is unexpected, is it still useful?
+  \item How to make the system easy to use?
+  \item How will it behave in a large database?
+  \item What other techniques will improve it?
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{Thank you}
+  \Large
+  Tiago Fernandes Tavares\\
+  \url{tiagoft@gmail.com}\\
+  \url{http://www.nics.unicamp.br/~tiago}
+}
+
+\end{document}
+
