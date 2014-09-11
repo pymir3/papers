@@ -1,0 +1,768 @@
+% -----------------------------------------------
+% Template for ICMC SMC 2014
+% adapted and corrected from the template for SMC 2013,  which was adapted from that of  SMC 2012, which was adapted from that of SMC 2011
+% -----------------------------------------------
+
+\documentclass{article}
+\usepackage{icmcsmc2014}
+\usepackage{times}
+\usepackage{ifpdf}
+\usepackage[english]{babel}
+\usepackage{tikz}
+\usepackage{pgfplots, pgfplotstable}
+%%%% TIKZ STUFF %%%%%
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+
+
+% Define block styles
+\tikzstyle{block} = [rectangle, draw, fill=white!100, 
+    text width=8em, text centered, rounded corners, minimum
+    height=2em]
+\tikzstyle{block2} = [rectangle, draw, fill=gray!20, 
+    text width=8em, text centered, rounded corners, minimum height=2em]
+\tikzstyle{line} = [draw, -latex']
+
+
+
+
+%\usepackage{cite}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% Some useful packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%% See related documentation %%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsmath} % popular packages from Am. Math. Soc. Please use the 
+\usepackage{amssymb} % related math environments (split, subequation, cases,
+\usepackage{amsfonts}% multline, etc.)
+%\usepackage{bm}      % Bold Math package, defines the command \bf{}
+%\usepackage{paralist}% extended list environments
+%%subfig.sty is the modern replacement for subfigure.sty. However, subfig.sty 
+%%requires and automatically loads caption.sty which overrides class handling 
+%%of captions. To prevent this problem, preload caption.sty with caption=false 
+%\usepackage[caption=false]{caption}
+%\usepackage[font=footnotesize]{subfig}
+
+
+%user defined variables
+\def\papertitle{Query-by-Multiple-Examples: Content-Based Search in
+  Computer-Assisted Sound-Based Musical Composition}
+\def\firstauthor{Tiago Fernandes Tavares}
+\def\secondauthor{J\^{o}natas Manzolli}
+\def\thirdauthor{Third author}
+
+% adds the automatic
+% Saves a lot of ouptut space in PDF... after conversion with the distiller
+% Delete if you cannot get PS fonts working on your system.
+
+% pdf-tex settings: detect automatically if run by latex or pdflatex
+\newif\ifpdf
+\ifx\pdfoutput\relax
+\else
+   \ifcase\pdfoutput
+      \pdffalse
+   \else
+      \pdftrue
+\fi
+
+\ifpdf % compiling with pdflatex
+  \usepackage[pdftex,
+    pdftitle={\papertitle},
+    pdfauthor={\firstauthor, \secondauthor},%, \thirdauthor},
+    bookmarksnumbered, % use section numbers with bookmarks
+    pdfstartview=XYZ % start with zoom=100% instead of full screen; 
+                     % especially useful if working with a big screen :-)
+   ]{hyperref}
+  %\pdfcompresslevel=9
+
+  %\usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are and their extensions so 
+  %you won't have to specify these with every instance of \includegraphics
+  %\graphicspath{{./figures/}}
+  %\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+
+  \usepackage[figure,table]{hypcap}
+
+\else % compiling with latex
+  \usepackage[dvips,
+    bookmarksnumbered, % use section numbers with bookmarks
+    pdfstartview=XYZ % start with zoom=100% instead of full screen
+  ]{hyperref}  % hyperrefs are active in the pdf file after conversion
+
+  \usepackage[dvips]{epsfig,graphicx}
+  % declare the path(s) where your graphic files are and their extensions so 
+  %you won't have to specify these with every instance of \includegraphics
+  \graphicspath{{./figures/}}
+  \DeclareGraphicsExtensions{.eps}
+
+  \usepackage[figure,table]{hypcap}
+\fi
+
+%setup the hyperref package - make the links black without a surrounding frame
+\hypersetup{
+    colorlinks,%
+    citecolor=black,%
+    filecolor=black,%
+    linkcolor=black,%
+    urlcolor=black
+}
+
+
+% Title.
+% ------
+\title{\papertitle}
+
+% Authors
+% Please note that submissions are NOT anonymous, therefore 
+% authors' names have to be VISIBLE in your manuscript. 
+%
+% Single address
+% To use with only one author or several with the same address
+% ---------------
+\oneauthor
+   {\firstauthor, \secondauthor} {Interdisciplinary Nucleus of Sound
+     Communication\\Music Department --
+     Institute of Arts\\University of Campinas\\Campinas - SP - Brazil \\ %
+     {\tt \href{mailto:tiago@nics.unicamp.br}{tiago@nics.unicamp.br}}}
+
+%Two addresses
+%--------------
+% \twoauthors
+%   {\firstauthor} {Affiliation1 \\ %
+%     {\tt \href{mailto:author1@smcnetwork.org}{author1@smcnetwork.org}}}
+%   {\secondauthor} {Affiliation2 \\ %
+%     {\tt \href{mailto:author2@smcnetwork.org}{author2@smcnetwork.org}}}
+
+% Three addresses
+% --------------
+% \threeauthors
+%   {\firstauthor} {Affiliation1 \\ %
+%     {\tt \href{mailto:author1@smcnetwork.org}{author1@smcnetwork.org}}}
+%   {\secondauthor} {Affiliation2 \\ %
+%     {\tt \href{mailto:author2@smcnetwork.org}{author2@smcnetwork.org}}}
+%   {\thirdauthor} { Affiliation3 \\ %
+%     {\tt \href{mailto:author3@smcnetwork.org}{author3@smcnetwork.org}}}
+
+
+% ***************************************** the document starts here ***************
+\begin{document}
+%
+\capstartfalse
+\maketitle
+\capstarttrue
+%
+\begin{abstract}
+We propose a search method, namely Query-by-Multiple-Examples, that is
+able to search, within an audio sample 
+database, for a particular sonic characteristic. The characteristic is
+learned on-the-fly by means of multiple examples provided by a human
+user, thus avoiding ambiguities due to manual labelling. We evaluate
+four variations of the proposed method using ground truth provided
+by three musicians. It is shown that, for queries based on sonic
+characteristics, the query modelling process yields more correct
+results than if several single-example queries were executed in
+parallel using the same input data.
+\end{abstract}
+%
+
+\section{Introduction}\label{sec:introduction}
+Sound-based music is that in which the main discourse is
+based on the evolution of sonic characteristics
+\cite{Solomos2013}. This category 
+comprises genres such as Electroacoustic, some kinds of Electronics,
+Acousmatic, and Mixed Music. A frequent part of the composition 
+process in these genres is recording sound samples from diverse
+sources and using them as material -- either raw \cite{Schwarz2005},
+processed \cite{Opie2003} or as
+inspiration \cite{Nouno2009} -- for the construction of a piece.
+
+Although it is common that a musician has a personal, well-known
+sample database, the process of recording new samples may be
+time-demanding. Collaborative databases allow a composer to
+benefit from its peer's recording work, providing quick access to
+many more sounds than it would be feasible to personally
+record. We propose a search method that allows
+semi-automatic search using personalized criteria, allowing composers
+to find new, interesting 
+sounds in sample databases that are too big for careful listening.
+
+Many content-based search methods rely on semantic tags
+\cite{Platt2002,Pauws2002,Kodama2005,Shao2009,Jensen2012,Bogdanov2013}
+or other contextual data, like user ratings or popularity
+\cite{Knees2013}, but these approaches are of limited use for
+composers as they are often interested in sonic characteristics of an
+audio sample, not the identification or perceived quality of the
+recorded object. It is important to note that sonic
+characteristics are often multi-dimensional, and composers are often
+interested in nuances \cite{Moravec2005}, such as ``noisiness'' or ``brightness'', which may assume different meanings depending on the context
+\cite{Sarkar2007}. Therefore, we 
+propose a data-driven system as a solution for this problem.
+
+In a data-driven search system \cite{Li2000,Lancieri2008}, sound samples are
+mapped into a $\mathbb{R}^N$ vector space defined by low-level
+features calculated 
+from audio samples. These features aim at encoding the multiple
+dimensions related to sound perception, which means perceptually similar sounds are
+likely to be closer to each other \cite{Tzanetakis2002} according to
+some distance measure \cite{Helen2010}. 
+However, it is
+impossible to know, from a single element, what perceptual
+characteristics are desired by the composer and what are not
+important; hence, the search system 
+requires, as input, two or more examples so that it is possible to
+know which dimensions should be considered or disregarded in the
+search process.
+
+We propose a novel search method, namely
+\textit{Query-by-Multiple-Examples}, 
+in which multiple examples are used to train a search machine
+regarding what perceptual characteristics are desired 
+by the user and what other characteristics may be disregarded. This
+aims at providing a high level of customization in the search
+criteria. Thus, the composer's perception is quickly modelled and
+extended, allowing the retrieval of sound samples in a big database
+according to personal criteria.
+
+This paper is organized as follows.
+%In Section \ref{sec:related}, we bring a brief review of related work. 
+The implemented search methods
+are described in Section \ref{sec:method}. The evaluation method, as
+well as the results, are shown in Section
+\ref{sec:evaluation}. Section \ref{sec:discussion} brings further
+discussion and Section \ref{sec:conclusion} concludes the text.
+
+% \section{Related Work}\label{sec:related}
+% Content-based queries are used in audio and music databases in order
+% to retrieve elements that fit particular perceptual or subjective
+% criteria \cite{Li2000}. Essentially, this task is similar to
+% classifying the elements of a database \cite{Tzanetakis2002} according
+% to their similarity to an element provided as input (the query). For
+% this kind of application, it is necessary to find a way to describe
+% the elements of the database according to their content.
+
+% One possible way of achieving this description is through contextual data
+% \cite{Knees2013}, which comprises both metadata (keywords that describe
+% database elements) and user-based measures (for example, user
+% ratings). This approach, used by Platt et al. \cite{Platt2002}, Pauws et
+% al. \cite{Pauws2002} and Kodama et al. \cite{Kodama2005}, assumes that
+% two different users are likely to describe the same database element
+% using similar words, which is the 
+% case for large, cloud-based popular music databases. However, sonic
+% textures are described by different people using 
+% several different words \cite{Sarkar2007}, especially in the case of
+% musicians that look for a particular timbral aspect
+% \cite{Moravec2005}.
+
+% This means that, for the purpose of timbre searches, a highly
+% personalized search is desirable. For this application, metadata may
+% be unreliable, and user-based measures prevent personalization of the
+% search criteria. Therefore, a content-based approach \cite{Li2000} may
+% prove more effective.
+
+% Such approaches map database elements (i.e., audio samples) to a
+% $\mathbb{R}^N$ vector space, in which samples that sound similar are likely to be
+% placed in positions that are closer to each other
+% \cite{Tzanetakis2002}. Then, a search algorithm is applied to find
+% database elements that are more similar to the query
+% \cite{Li2000}. By changing the mapping process and the search
+% algorithm, several approaches for the recommendation problem have been
+% proposed.
+
+
+% Li and Khokhar \cite{Li2000} used a wavelet-based decomposition and a
+% hierarchical clustering technique to retrieve animal sound samples
+% from a database. Lancieri et al. \cite{Lancieri2008} proposed recommendation using
+% features extracted directly from the acoustic signal. Similarly, Shao
+% et al. \cite{Shao2009}, Bogadov et
+% al. \cite{Bogdanov2011,Bogdanov2013} and Jensen et
+% al. \cite{Jensen2012} proposed hybrid approaches, in
+% which both acoustic features, metadata and user preferences are
+% combined in an unique similarity 
+% measure.
+
+% Hel\'{e}n and Virtannen \cite{Helen2010} evaluated which
+% similarity measures would give better results in Query-by-Example
+% problems. The test used a dataset aimed at musical genre
+% classification tasks. They show that estimating a Gaussian model from
+% time-varying acoustic features, and then calculating the Euclidean
+% distance between these models, performed best at the classification
+% task.
+
+% Schnitzer et al. \cite{Schnitzer2011} observed that, in content-based
+% recommendation systems, an element could be close to many other
+% elements, hence being recommended multiple times. This problem, namely
+% ``the hub problem'', was solved by substituting the Euclidean distance
+% for a measure called Mutual Proximity (MP). The Mutual Proximity is a
+% measure of how close an element is to another element and, at the same
+% time, how far it is to other elements of the dataset.
+
+% In the Query-by-Multiple-Examples, several examples are used to train
+% a search machine regarding what perceptual characteristic is desired
+% by the user and what other characteristics may be disregarded. This
+% way, we achieve a high level of customization in the search
+% criteria. More details regarding the proposed system will be discussed
+% in the next section.
+
+\section{Proposed Method}\label{sec:method}
+The proposed system is built as to merge two different sources of
+information, as depicted in Figure \ref{fig:block-diagram}. The first
+source is the composer, which provides audio examples of the sonic
+characteristic that is desired to be found (a query). The second
+source is the computer, which aims at extending, for all the database,
+the criteria applied to the construction of the query.
+\begin{figure}[ht!]
+\centering
+\begin{tikzpicture}[node distance = 4cm, auto]
+    % Place nodes
+    \node [block] (audio) {Audio Dataset};
+    \node [block2, below of=audio, yshift=2.7cm] (composer) {Composer};
+    \node [block, below of=composer, yshift=2.7cm] (perception) {Perception};
+%    \node [block, below of=perception, yshift=2.7cm] (query) {Examples};
+
+    \node [block2, right of=composer] (computer) {Computer};
+    \node [block, below of=computer, yshift=2.7cm] (features) {Features};
+    \node [block, below of=features, yshift=2.7cm] (model) {Model};
+    \node [block, below of=model, yshift=2.7cm] (recommendation) {Recommendation};
+
+    % Draw edges
+    \path [line] (audio) -- (composer);
+    \path [line] (audio) -| (computer);
+    \path [line] (composer) -- (perception);
+%    \path [line] (perception) -- (query);
+    \path [line] (perception) |- node [xshift=1cm] {Query $\{e_j\}$}  (model);
+    \path [line] (computer) -- (features);
+    \path [line] (features) -- node {$\{d_i\} \in \mathbb{R}^N$} (model);
+    \path [line] (model) -- (recommendation);
+    \path [line,dashed] (recommendation) -| ([xshift=-0.5cm] composer.west) -- (composer);
+\end{tikzpicture}
+\label{fig:block-diagram}
+\caption{Block diagram for the proposed system.}
+\end{figure}
+
+By combining the objective, vector representation of audio samples and
+the subjective, perceptually-driven query, the system builds a
+model for what it detects as the characteristic sought by the
+composer. This model is, then, extrapolated, so that other audio
+samples that correspond to that characteristic, are found. Then, the
+system yields a recommendation, which can be used by the composer.
+
+In our work, the calculation of features (yielding representations in
+the $\mathbb{R}^N$ vector space) follows the same general structure
+used in previous work \cite{Tzanetakis2002,Helen2010}, as described in
+Section \ref{sec:features}. However, we experimented several different
+methods for modelling queries. This will be described in details in
+Section \ref{sec:queries}.
+
+\subsection{Feature calculations}\label{sec:features}
+The process of obtaining a vector representation in the feature
+space begins with calculating a framewise Short-Time Fourier Transform, using 23ms
+frames, with a 50\% overlap ratio, multiplying each frame by a Hanning
+window and then calculating the absolute value $X_q[k]$ of the DFT of
+each frame. For each frame $q$, a set of acoustic features are calculated, as described in
+Table \ref{tab:features}. Also, the first and second-order
+differentials of each features are calculated.
+\begin{table*}
+\centering
+\caption{Brief description of acoustic features}
+\begin{tabular}{|c|c|} \hline
+Feature & Description \\ \hline \hline
+Energy & Sum of the squared values of $X_q[k]$. Indicates how loud the frame is. \\
+Spectral centroid & Centroid of $X_q[k]$. Correlates with the brightness
+of the frame. \\
+Spectral roll-off & Frequency above which there is less than 15\% of
+the energy of a frame. \\
+Spectral flatness & Indicates how close the frame is to white
+noise. \\
+Mel-Frequency Cepstral Coefficients & Vector representation
+of audio textures, inspired in cochlea models. \\ \hline
+\end{tabular}
+\label{tab:features}
+\end{table*}
+
+For each feature and its differentials, we calculate a set of
+statistics. This set comprises mean and variance, which give an idea
+of the general behaviour of these features. We also obtain the slope
+(considering a linear regression) and the value and time location of
+the maximum and minimum values, to depict the
+evolution of features over time.
+
+This process associates each audio sample to a descriptive vector,
+which we expect to encode its perceptual characteristics. As it will
+be seen, there are many ways to model multiple-example queries. This
+will be discussed in the next section.
+
+\subsection{Models for queries}\label{sec:queries}
+The modelling process for queries aims at detecting relevant sonic
+characteristics as described by the composer using examples
+$e_j$. This process assumes that these characteristics are encoded within the
+objective $\mathbb{R}^N$ feature space defined by the calculated
+features (as described in Section \ref{sec:features}). The model gives
+a score to each element $d_i$ of the database, and infers that the element
+with the highest score also presents the characteristic desired by the
+composer.
+
+We evaluated several methods for obtaining the model. This was done
+because there is no particular prior reason to assume that a model is
+better than another, hence a detailed evaluation is necessary. Each
+method has its own rationale, which will be described below.
+
+The first method, \textbf{Minimum Distance} (MD), gives an element a score
+which is the inverse of the minimum Euclidean distance between itself
+and any element from the query, as depicted in Expression
+\ref{eq:md}. It is
+equivalent to performing a few queries-by-example (using single
+examples) in parallel, and then selecting the best results. Hence, it
+may not be considered as a valid method for Query-by-Multiple-Examples.
+\begin{equation}
+{\mbox{MD}}(d_i) = 1/(\min_j \Vert d_i - e_j \Vert).
+\label{eq:md}
+\end{equation}
+
+The second method, \textbf{Minimum Mutual Distance} (MMD), was
+inspired by work by Schnitzer et. al \cite{Schnitzer2011}, which
+observes that an element that belong to a cluster must not only be close
+to the cluster but also distant from other clusters. Hence, it scores
+each sample from the database with the minimum distance between itself
+and an element from the query minus the minimum distance between
+itself and an element in the database, as described in Expression
+\ref{eq:mmd}. Although this method is more complex than MD, it also
+does not perform a Query-by-Multiple-Examples, but multiple queries-by-single-example
+in parallel.
+\begin{equation}
+{\mbox{MMD}}(d_i) = 1/(\min_{j} \Vert d_i - e_j \Vert - \min_{k} \Vert d_i - d_k \Vert).
+\label{eq:mmd}
+\end{equation}
+
+Third, we consider the \textbf{Naive Bayes} (NB) approach. In this
+method, the elements of the 
+query are used to estimate the mean $\mu_n$ and variance $\sigma_n$ of
+a gaussian model for each dimension, which is assumed to be
+independent from the others. Thus, the score of an element of the database is given
+by:
+\begin{equation}
+\mbox{NB}(d_i) = \prod_{n=1}^N g(d_{i,n}, \mu_n, \sigma_n),
+\end{equation}
+where $g(x, \mu, \sigma) = (1/\sigma \sqrt{2 \pi}) \exp(-(\mu - x)^2 / 2\sigma ^2)$.
+
+%The Gaussian model applied in the NB approach assumes that the points
+%of interest are located in a convex region in the $\mathbb{R}^N$
+%vector space representation.
+
+The NB approach assumes that dimensions spanned by features are
+orthogonal. There is no
+evidence that this condition is true, therefore we applied Principal
+Component Analysis (PCA) to obtain an orthogonal projection
+$\boldsymbol B$ of the query with a minimal approximation error. We
+expect that this projection will be a better representation for the
+composer's perception than the raw feature set itself.
+
+The projection is made using $M-1$ vectors, where $M$ is the number of
+elements in the query, because this is the maximum rank of the
+projection provided by PCA. The projection is calculated using only
+elements from the query, and then applied over the whole
+database. Then, the naive Bayes approach is used normally as described
+above, hence the method is named \textbf{PCA-Bayes} (PB).
+
+Hence, four different modelling methods were applied. Two of them are simple
+applications of simple query-by-example schemas, whereas the other two
+use the correlations within the query to build a different model. For
+comparison purposes, a random recommender (recommending a random
+element from the database) was also used in the evaluation set, which
+will be described in detail in the next section.
+
+\section{Evaluation and Results}\label{sec:evaluation}
+The evaluation process aimed at detecting whether the system is able
+to retrieve audio samples from the database as if the composer was
+searching for it.
+
+To reproduce this scenario, we interviewed three
+composers, all of them graduate students from the Music
+Department. After a brief talk about their composition processes, we
+asked them to group pre-defined audio samples (from a set of 51
+elements, around 10s long, extracted from a personal music collection)
+into subsets that made sense for them, and, if possible, explain what
+criteria was used for grouping. Their criteria was significantly
+different, as it is discussed below.
+
+Composer \textbf{C1} stated that processed samples were used as
+material in the piece composition process in order to reach a
+particular sound characteristic. The
+presented sets were predominantly grouped using characteristics linked
+to auditory aspects of each sample. Typical grouping criteria were
+labeled \textit{dry/dark timbre}, \textit{static harmonic sound},
+\textit{brightness and compression} and \textit{glissando}. 
+
+Composer \textbf{C2}'s composition process uses the semantic
+values of the audio samples, in addition to their sound. The grouping
+process considered semantic-valued characteristics, that is, the
+context in which each sample was obtained. In this case, grouping
+criteria were of higher level, such as \textit{celtic}, \textit{drums}
+and \textit{prepared piano}.
+
+Composer \textbf{C3} preferred to use sound samples as source for
+granular synthesis processes. Grouping criteria was based on auditory
+characteristics of samples, as well as general semantics. Among the
+grouping criteria, it was possible to find \textit{vocal},
+\textit{regular}, \textit{synthesizer},
+\textit{orchestral} and \textit{attack modes}.
+
+The subsets presented by each composer were assumed as ground-truth,
+that is, a query containing some elements of each subset should find
+the remaining elements. Several queries were made from each group,
+considering different numbers of elements. The queries made from the
+groups of each composer were considered separately, so that their
+different reasoning towards the search process could be analyzed.
+
+For each query, the system was asked to retrieve three samples from
+the database. A retrieved sample is considered correct if it belongs to the
+subset from which the query was made. Then, we calculated two accuracy
+measures, \textit{Acc1} and \textit{Acc2}, defined as:
+\begin{equation}
+\mbox{Acc1} = \frac{\mbox{\# retrievals with at least 1 correct
+    sample}}{\mbox{\# total queries} }.
+\end{equation}
+\begin{equation}
+\mbox{Acc2} = \frac{\mbox{\# correctly retrieved samples}}{ \mbox{\# total retrieved samples} }
+\end{equation}
+
+\textit{Acc1} measures the probability that a query will retrieve at
+least one useful sample, which is desirable because it means that the
+search space has been narrowed. \textit{Acc2} measures the probability
+that a retrieved sample is useful, which is also a desirable
+characteristic of the system. It is important to note that
+\textit{Acc1} is higher when the system avoids false negatives,
+whereas \textit{Acc2} is higher when the system presents fewer false
+positives.
+
+We tested the system using all query modelling methods discussed in
+Section \ref{sec:queries}. The results for the datasets related to
+composers C1, C2 and C3 were considered separately. \textit{Acc1} and
+\textit{Acc2} for each test case are shown, respectively, in Figures
+\ref{fig:res_acc1} and \ref{fig:res_acc2}.
+\begin{figure}[ht!]
+\centering
+\caption{Results using Acc1.} 
+\begin{tikzpicture}
+\pgfplotstableread{ % Read the data into a table macro
+Label   MD  MMD  NB PB  
+C1      38   44   42  52 
+C2      42   51   51  43
+C3      61   72   67  76
+}\datatable
+
+\begin{axis}[
+  width=0.45\textwidth,
+  height=5cm,
+	xtick=data,
+  ymin=0,
+  ymax=100,
+  ylabel=Acc1 (\%),
+	xlabel=Composers,
+	enlarge x limits = 0.20,
+	legend style={legend columns=-1},
+	ybar,
+	bar width=10pt,
+  xticklabels from table={\datatable}{Label}
+]
+
+\addplot [fill=white] table [x expr=\coordindex, y=MD] {\datatable};    % Plot the "First" column against the data index
+\addplot [fill=gray!30]table [x expr=\coordindex, y=MMD] {\datatable};
+\addplot [fill=gray!90] table [x expr=\coordindex, y=NB] {\datatable};
+\addplot [fill=black] table [x expr=\coordindex, y=PB] {\datatable};
+% \addplot 
+% 	coordinates {(MD,0.38) (MMD,0.44)
+% 		 (NB,0.42) (PB,0.52)};
+
+% \addplot 
+% 	coordinates {(MD,0.42) (MMD,0.51)
+% 		 (NB,0.51) (PB,0.43)};
+
+% \addplot 
+% 	coordinates {(MD,0.61) (MMD,0.72)
+% 		 (NB,0.67) (PB,0.76)};
+
+
+\legend{MD,MMD,NB,PB}
+\end{axis}
+\end{tikzpicture}
+\label{fig:res_acc1}
+\end{figure}
+\begin{figure}[ht!]
+\centering
+\caption{Results using Acc2.} 
+\begin{tikzpicture}
+\pgfplotstableread{ % Read the data into a table macro
+Label   MD  MMD  NB PB  
+C1      17   17   17  21 
+C2      17   21   23  22
+C3      27   34   33   40 
+}\datatable
+
+\begin{axis}[
+  width=0.45\textwidth,
+  height=5cm,
+	xtick=data,
+  ymin=0,
+  ymax=100,
+  ylabel=Acc2 (\%),
+	xlabel=Composers,
+	enlarge x limits = 0.20,
+	legend style={legend columns=-1},
+	ybar,
+	bar width=10pt,
+  xticklabels from table={\datatable}{Label}
+]
+
+\addplot [fill=white] table [x expr=\coordindex, y=MD] {\datatable};    % Plot the "First" column against the data index
+\addplot [fill=gray!30]table [x expr=\coordindex, y=MMD] {\datatable};
+\addplot [fill=gray!90] table [x expr=\coordindex, y=NB] {\datatable};
+\addplot [fill=black] table [x expr=\coordindex, y=PB] {\datatable};
+% \addplot  
+% 	coordinates {(MD,0.38) (MMD,0.44)
+% 		 (NB,0.42) (PB,0.52)};
+
+% \addplot 
+% 	coordinates {(MD,0.42) (MMD,0.51)
+% 		 (NB,0.51) (PB,0.43)};
+
+% \addplot 
+% 	coordinates {(MD,0.61) (MMD,0.72)
+% 		 (NB,0.67) (PB,0.76)};
+
+
+\legend{MD,MMD,NB,PB}
+\end{axis}
+\end{tikzpicture}
+\label{fig:res_acc2}
+\end{figure}
+
+As it can be seen, the MD method performed worse for all of the test
+cases. Nevertheless, its results are comparable to those yielded by
+the other methods, i.e., it is not possible to claim that the
+difference is huge. Hence, MD may be considered a baseline method for
+further discussion.
+
+Another key result is that MMD always performs better than MD. This
+shows that its assumption -- that an element that belongs to a set
+must not only be close to the set, but also distant from the other
+sets \cite{Schnitzer2011} -- is useful for our purposes. More
+interesting results, however, derived from the application of the NB
+and PB methods.
+
+In the case of C1 and C3, it is clear that PB outperforms all other
+methods, considering either \textit{Acc1} or \textit{Acc2}. However,
+in the case of C2, PB is outperformed by both NB and MMD for
+\textit{Acc1} and has a similar performance considering
+\textit{Acc2}. This may be due to the grouping process performed by
+composer C2.
+
+Composer C2 applied a predominantly semantic grouping of
+elements, that is, elements that do not sound alike, but are
+culturally related (for example: the sounds of Celtic fiddles and of
+Irish tap dancers) were grouped together. This means that the feature
+space -- which describes auditory characteristics -- was divided in
+several clusters with useful data. This caused the MMD method to
+present a better performance.
+
+Also, NB performed better than PB for this case, which shows
+that the original feature set defined better local maxima to the score
+function than the reduced-dimension orthogonal set. Although
+orthogonality is a desirable trait, it is important to note that a
+high-dimensional space has a greater chance to have at least one
+dimension in which any points, chosen at random, are positioned in a
+linearly separable convex hull. However, if more dimensions were used in
+the PCA reduction, they would be linearly dependent of the previous ones,
+which means another method for dimension reduction would be required.
+
+The next section conducts further discussion on these results.
+
+\section{Discussion}\label{sec:discussion}
+One interesting point shown by the results is that they are highly
+dependent on the criteria used by the composer for
+classification. In our tests, Acc1 varied from 50\% to 75\%, and Acc2
+from 20\% to 40\%. This is a great relative step, which has to be
+considered when performing future evaluations.
+
+Although the system was evaluated using objective measures, it is
+important to note that it is a recommendation system, which will
+interact with users. Hence, it is necessary to conduct further tests
+to detect whether 
+the results provided by the system are useful for the composer,
+despite of not being expected \textit{a priori}. These results may
+show if the system is able to recommend useful samples (maybe some
+sample that may be used, but the composer would not have thought of
+about alone), thus allowing generalization towards a bigger database.
+
+The results obtained above show that each mindset for sample grouping
+-- auditory or semantic -- can be better modelled by a different
+algorithm: auditory-based criteria are well suited for the PB method,
+whereas semantic-based are better modelled using MMD. This happens
+because the dimensions spanned by acoustic describe auditory
+characteristics, which means semantic information is only present as
+an underlying function of the acoustic features. Possible ways to deal
+with this situation may involve other dimensionality-reduction
+techniques, such as Independent Component Analysis (ICA) or non-linear
+PCA.
+
+Although MMD -- which corresponds to multiple
+queries by single-example -- outperforms NB and PB for the queries
+corresponding to composer C2, it is important to note that the system
+was built aiming at detecting sonic characteristics, rather than
+semantics. For the queries corresponding to composers C1 and C3, which
+follow the idea of describing sounds without considering semantics,
+PB -- a method that clearly takes advantage of the correlations within
+the multiple example query -- outperforms all others. Therefore, the
+results show that the proposed system, using PB, provided a meaningful
+contribution towards the problem of searching for sound
+characteristics within a database.
+
+Next section presents conclusive remarks.
+
+\section{Conclusion}\label{sec:conclusion}
+We presented a search method, namely Query-By-Multiple-Examples. It 
+receives as input a few audio samples that examples of a particular
+sound characteristic yields other samples, from a database, that also
+present that characteristic. The method is aimed at extending the
+search possibilities of composers in the context of
+sound-based music, that is, music based on the evolution of sonic
+characteristics.
+
+The method is based on mapping all audio samples from a database into
+a vector space using low-level acoustic features. Queries are received
+from the user and modelled, yielding a score for each element in the
+database. We tested four different methods for modelling the query:
+minimum distance and minimum mutual distance (corresponding to several
+queries-by-single-example executed in parallel), and naive Bayes and
+PCA-Bayes (corresponding to query-by-multiple-example).
+
+We evaluated all variations using ground-truth queries, defined by
+three different musicians. They provided very different
+proposals for the grouping of similar audio samples, according to
+their typical composition process. It has been shown that considering
+the correlations within the provided inputs improves the search
+accuracy for auditory-inspired queries.
+
+%It has been shown that
+%auditory-related queries are well modelled by 
+%the Bayesian methods, whereas element-wise distances (minimum distance
+%and minimum mutual distance) are more
+%suitable for semantic-based queries.
+
+The obtained results, however, do not account for the interaction
+between composers and the computer, which is an important part of the
+composition process. Thus, it is necessary to
+evaluate whether the wrong results yielded by the system are useful
+suggestions (despite of being unexpected) or if they are just plain
+wrong, and, more than that, how the system would behave in an unknown
+database. This points a clear direction for future work.
+
+\begin{acknowledgments}
+The authors thank FAPESP (proc. 2013/17329-5) for funding this research.
+\end{acknowledgments} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%bibliography here
+\bibliography{recommendation}
+
+
+\end{document}
